@@ -1,0 +1,130 @@
+<!-- <div class="bg-white w-100">
+    nav-bar
+</div> -->
+
+<!-- #region Modal-Productos -->
+<div *ngIf="isOpen()">
+    <div  class="relative z-20" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity sm:block md:block">
+            <div class="fixed inset-0 z-20 w-screen h-full overflow-y-auto">
+                <div class="flex flex-row min-h-full w-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
+                    <div class="flex w-full transform justify-center text-center text-base transition md:my-8 md:min-h-full md:px-4 md:max-w-6xl lg:max-w-6xl lg:min-h-full">
+                        <div class="relative flex-row flex rounded-md items-center overflow-hidden bg-white px-1 pb-1 pt-1 shadow-2xl sm:px-2 sm:pt-2 md:p-3">
+                            <button (click)="closeModal()" type="button" class="absolute right-4 top-4 text-black hover:text-gray-500 bg-white rounded-full sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <div class="grid sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-x-6 gap-y-2 px-8 py-1">
+                                <div class="sm:col-span-1 sm:text-center md:text-left lg:text-left md:col-span-4 lg:col-span-4 lg:col-start-2 md:col-start-2 mt-1 font-semibold text-2xl text-left text-gray-600 leading-tight truncate justify-items-start items-start content-start cursor-default">
+                                    {{nombreModal}}
+                                </div>
+                                <div class="modal-content-header sm:col-span-1 sm:text-center md:text-left lg:text-left md:col-span-4 lg:col-span-4 lg:col-start-2 md:col-start-2 lg:row-span-1 md:row-span-1 pr-1 text-base font-normal text-left text-gray-600 leading-tight text-clip justify-items-start items-start content-start cursor-default">
+                                    {{nombreVariantes}}
+                                </div>
+                                <div class="sm:col-span-1 sm:flex sm:items-center sm:justify-center sm:w-full md:col-span-1 lg:col-span-1 row-span-6">
+                                    <img
+                                            class="sm:h-80 sm:w-80 md:h-full md:w-full modal-content-image object-cover rounded-md"
+                                            src="{{ productoModal.imagen }}"
+                                        />
+                                </div>
+                                <div class="sm:col-span-1 md:col-span-3 lg:col-span-3 sm:row-span-1 md:row-span-6 lg:row-span-6 max-h-96 modal-content-item flex-nowrap overflow-auto snap-mandatory overscroll-auto pl-1">
+                                    <ng-container *ngFor="let variante of productoModal.variantes; let varianteIndex = index">
+                                        <ng-container *ngIf="varianteIndex === 0; else optionSecondary">
+                                            <div class="mb-4 snap-center">
+                                                <div class="flex items-center justify-between">
+                                                  <h4 class="text-base text-gray-500 font-bold cursor-default">{{variante.grupo}}</h4>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #optionSecondary>
+                                            <div class="mb-4 mt-4 snap-center">
+                                                <div class="flex items-center justify-between">
+                                                  <h4 class="text-base text-gray-500 font-bold cursor-default">{{variante.grupo}}</h4>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                        <div class="relative grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-6 sm:gap-y-1 md:gap-1 lg:gap-1 pr-1">
+                                                <ng-container *ngFor="let option of variante.opciones  let opcionIndex = index" class="p-2 group">
+                                                    <div class="relative lg:col-span-2 md:col-span-2 sm:col-span-1 sm:px-1 sm:py-2 modal-item group snap-center">
+                                                        <label class="relative flex flex-col items-center justify-center rounded-md border py-3 px-1 text-sm font-medium uppercase hover:bg-gray-50 sm:flex-1 cursor-pointer bg-white text-gray-900 shadow-sm"
+                                                        >
+                                                            <input type="radio" [name]="'option-choice-'+ varianteIndex " [value]="option.precio"
+                                                                [checked]="opcionIndex===0" 
+                                                                class="sr-only peer" >
+                                                            <span id="option{{opcionIndex}}-name{{varianteIndex}}" class="truncate w-full">{{option.nombre}}</span>
+                                                            <span id="option{{opcionIndex}}-name{{varianteIndex}}" class="text-blue-400 font-bold">&nbsp;{{option.precio | currency:'USD':'symbol':'1.2-2'}}&nbsp;</span>
+                                                            <span id="option{{opcionIndex}}-name{{varianteIndex}}" class="pointer-events-none absolute -inset-px rounded-md peer-checked:ring-4 peer-checked:ring-bg-blue-600" aria-hidden="true"></span>
+                                                        </label>
+                                                    </div>
+                                                </ng-container>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="sm:col-span-1 md:col-span-3 lg:col-span-3 md:col-start-2 lg:col-start-2">
+                                    <div class="grid sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 content-end modal-content-footer flex gap-x-1 gap-y-2">
+                                        <div class="w-full sm:col-span-2 md:col-span-2 lg:col-span-2">
+                                            <button type="submit" class="flex w-full items-center justify-center rounded-md border border-blue-500 bg-white px-8 py-3 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-white focus:ring-2 focus:bg-blue-300 shadow-lg cursor-default" (click)="agregarProdCarritoModal()">Agregar</button>
+                                        </div>
+                                        <div class="w-full sm:col-span-2 md:col-span-1 lg:col-span-1 md:col-start-3 lg:col-start-3 sm:py-2 sm:px-2 flex justify-center ml-6 ">
+                                            <button class="rounded-md text-base tex-xl font-semibold  bg-gray-100 border hover:bg-gray-300 hover:text-white min-h-10 min-w-10 flex items-center justify-center" (click)="restarCantidadModal()">-</button>
+                                            <span class="rounded-md border px-4 py-2 content-center font-semibold pointer-events-none cursor-default">{{cantidadModal}}</span>
+                                            <button class="rounded-md text-base tex-xl font-semibold  bg-gray-100 border hover:bg-gray-300 hover:text-white min-h-10 min-w-10 flex items-center justify-center" (click)="sumarCantidadModal()">+</button>
+                                                <span class="text-left font-semibold text-xl content-center ml-2">Subtotal</span>
+                                        </div>
+                                        <div class="w-full sm:col-span-4 md:col-span-1 lg:col-span-1 md:col-start-4 lg:col-start-4 flex sm:justify-center sm:gap-y-3 sm:py-2 sm:px-0 md:justify-end lg:justify-end modal-importe">
+                                            <span class="text-right text-primary-600 text-base font-semibold text-3xl content-center cursor-default">{{importeModal | currency:'USD':'symbol':'1.2-2'}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #endregion -->
+
+<div class="flex flex-col w-full max-w-full border-none bg-white">
+    <!-- Categorys -->
+     <!-- <div class="flex bg-gray-200 pr-2">
+        <span class="font-semibold flex pr-2 w-full">Categorías</span>
+     </div> -->
+    <div class="flex flex-row w-full bg-gray-200 h-20">
+        <ng-container *ngFor="let category of Categorias" class="flex flex-row gap-x-1 items-center justify-center h-10">
+            <button class="flex py-1 font-semibold px-8 bg-transparent border-2 border-blue-500 text-blue-500 mx-4 rounded-full items-center my-4 hover:text-white hover:bg-blue-500 hover:shadow-md"
+                (click)="seleccionarCategoria(category.numero)"
+                [ngClass]="{
+                    'bg-blue-500 text-white border-blue-500': categoriaSeleccionada === category.numero,
+                    'bg-transparent text-blue-500 border-2 border-blue-500': categoriaSeleccionada !== category.numero,
+                    'cursor-default': categoriaSeleccionada == category.numero
+                }">
+                {{category.nombre}}
+            </button>
+        </ng-container>
+    </div>
+    <div class="flex max-w-full bg-gray-200 grid sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-12 gap-x-2">
+        <ng-container *ngFor="let product of productosModal">
+            <div class="flex flex-col m-4 bg-white rounded-xl p-8 sm:col-span-1 md:col-span-2 lg:col-span-3 shadow-lg">
+                <div class="font-bold text-center py-2">
+                    {{product.nombre}}
+                </div>
+                <div class="max-h-full flex">
+                    <img class="h-80 w-80 object-cover rounded-md" [src]="product.imagen" alt="imagen-{{product.nombre}}">
+                </div>
+                <div class="text-center text-gray-500 hover:text-blue-500 cursor-pointer py-2">
+                    {{product.precio | currency:'USD':'symbol':'1.2-2'}}
+                </div>
+                <div class="flex align-items-center justify-center font-semibold">
+                    <button class="py-1 px-4 text-sm hover:bg-blue-500 shadow-md rounded-full hover:text-white text-center cursor-pointer bg-white text-blue-500 border-2 border-blue-500"
+                        (click)="agregarCarrito(product.variantes, product.codigo)">
+                        Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
