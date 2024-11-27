@@ -1,0 +1,25 @@
+<!-- Overlay -->
+<div 
+  *ngIf="isMenuOpen"
+  class="fixed inset-0 bg-black bg-opacity-50 z-40"
+  (click)="closeMenu()">
+</div>
+
+<!-- Sidebar -->
+<div
+  [class]="[
+    'fixed top-0 left-0 h-full bg-white shadow-lg z-50 transition-transform duration-300',
+    isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+  ].join(' ')">
+  <!-- <button class="p-4 text-gray-600" (click)="closeMenu()">
+    ✖
+  </button> -->
+  <nav class="mt-8 w-80">
+    <ul class="space-y-4">
+      <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Home</a></li>
+      <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">About</a></li>
+      <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Services</a></li>
+      <li><a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white">Contact</a></li>
+    </ul>
+  </nav>
+</div>

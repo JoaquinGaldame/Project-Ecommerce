@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { NgFor, DecimalPipe } from '@angular/common';
 import { Productos, IVariantes } from '../Interfaces/Home.inteface';
+import { CompactComponent } from '../layout/Common/compact/compact.component';
+import { LayoutComponent } from '../layout/Common/layout.component';
 import { Data, Categorias } from './data';
 import { CommonModule } from '@angular/common';
 // import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +11,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CompactComponent,LayoutComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
