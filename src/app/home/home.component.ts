@@ -2,16 +2,17 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { NgFor, DecimalPipe } from '@angular/common';
 import { Productos, IVariantes, IVariante } from '../Interfaces/Home.inteface';
 import { CompactComponent } from '../layout/Common/compact/compact.component';
-import { LayoutComponent } from '../layout/Common/layout.component';
+import { CarroComprasComponent } from '../layout/Common/carro-compras/carro-compras.component';
 import { Data, Categorias } from './data';
 import { CommonModule } from '@angular/common';
 // import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { CarroCompraService } from '../layout/Common/carro-compras/carro-compras.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CompactComponent,LayoutComponent],
+  imports: [CommonModule, CompactComponent, CarroComprasComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -36,14 +37,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public precioProductoModal: number = 0;
   public importeModalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(){
+  constructor(private serviceCarro: CarroCompraService){
     this.productos = Data;
     this.Categorias = Categorias;
-    this.productoModal = { nombre: '',codigo:'', precio: 0,stock: 0,categoria: '',cod_categoria: 0,imagen:'', variantes: [] }
+    this.productoModal = { id: 0, nombre: '',codigo:'', precio: 0,stock: 0,categoria: '',cod_categoria: 0,imagen:'', variantes: [] }
   }
 
   ngOnInit(){
-    console.log('Esto tiene data ' + JSON.stringify(this.data));
     this.productosSubject.subscribe((producto) => {
       this.productosModal = producto;
     });
@@ -70,10 +70,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
   }
 
-  agregarCarrito(variantes: IVariantes[],codigo: string): void{
+  abrirModal(variantes: IVariantes[],codigo: string): void{
+    const productSeleccionado = this.productos.filter((item) => item.codigo === codigo);
     if(variantes.length > 0){
-      console.log("abrir modal")
-      const productSeleccionado = this.productos.filter((item) => item.codigo === codigo);
       this.productoModal = productSeleccionado[0];
       this.nombreModal = this.productoModal.nombre;
       this.importeModalSubject.next(this.productoModal.precio);
@@ -88,6 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     } else{
       console.log("no abrir")
+      this.agregarCarrito(productSeleccionado[0],1)
     }
   }
 
@@ -144,6 +144,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  public agregarCarritoModal(producto: Productos, cantidad: number): void{
+    producto.cantidad = cantidad;
+    this.serviceCarro.agregarProducto(producto, cantidad);
+    this.closeModal();
+  }
+
+  public agregarCarrito(producto: Productos, cantidad: number): void{
+    producto.cantidad = cantidad;
+    this.serviceCarro.agregarProducto(producto, cantidad);
+  }
 
   public seleccionarCategoria(numero: number): void{
     if(numero !== 0){

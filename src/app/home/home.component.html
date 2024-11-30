@@ -2,7 +2,7 @@
     nav-bar
 </div> -->
 <compact-layout></compact-layout>
-
+<app-carro-compras></app-carro-compras>
 <!-- #region Modal-Productos -->
 <div *ngIf="isOpen()">
     <div  class="relative z-20" role="dialog" aria-modal="true">
@@ -66,7 +66,11 @@
                                 <div class="sm:col-span-1 md:col-span-3 lg:col-span-3 md:col-start-2 lg:col-start-2">
                                     <div class="grid sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 content-end modal-content-footer flex gap-x-1 gap-y-2">
                                         <div class="w-full sm:col-span-2 md:col-span-2 lg:col-span-2">
-                                            <button type="submit" class="flex w-full items-center justify-center rounded-md border border-blue-500 bg-white px-8 py-3 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-white focus:ring-2 focus:bg-blue-300 shadow-lg cursor-default" >Agregar</button>
+                                            <button type="submit" 
+                                                class="flex w-full items-center justify-center rounded-md border border-blue-500 bg-white px-8 py-3 text-base font-bold text-blue-500 hover:bg-blue-500 hover:text-white focus:ring-2 focus:bg-blue-300 shadow-lg cursor-pointer"
+                                                (click)="agregarCarritoModal(productoModal, cantidadModal)">
+                                                Agregar
+                                            </button>
                                         </div>
                                         <div class="w-full sm:col-span-2 md:col-span-1 lg:col-span-1 md:col-start-3 lg:col-start-3 sm:py-2 sm:px-2 flex justify-center ml-6 ">
                                             <button class="rounded-md text-base tex-xl font-semibold  bg-gray-100 border hover:bg-gray-300 hover:text-white min-h-10 min-w-10 flex items-center justify-center" (click)="restarCantidadModal()">-</button>
@@ -121,7 +125,7 @@
                 </div>
                 <div class="flex align-items-center justify-center font-semibold">
                     <button class="py-1 px-4 text-sm hover:bg-blue-500 shadow-md rounded-full hover:text-white text-center cursor-pointer bg-white text-blue-500 border-2 border-blue-500"
-                        (click)="agregarCarrito(product.variantes, product.codigo)">
+                        (click)="abrirModal(product.variantes, product.codigo)">
                         Agregar al Carrito
                     </button>
                 </div>
