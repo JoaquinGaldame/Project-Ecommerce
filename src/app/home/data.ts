@@ -3,10 +3,10 @@ export const Data: Productos[] = [
     { nombre: "Hamburguesa",codigo: "200100",precio: 10550,stock: 0,categoria: "Plato",cod_categoria: 1,imagen: "../../assets/productos/hamburguesa.jpg", variantes: []},
     { nombre: "Pizza Napolitana",codigo: "200101",precio: 11800,stock: 0,categoria: "Plato",cod_categoria: 1,imagen: "../../assets/productos/pizzaNapolitana.jpg", variantes: []},
     { nombre: "Pizza de Calabresa",codigo: "200102",precio: 12000,stock: 0,categoria: "Plato",cod_categoria: 1,imagen: "../../assets/productos/pizzaCalabresa.jpg", variantes: []},
-    { nombre: "Torta",codigo: "300100",precio: 6000,stock: 0,categoria: "Postre",cod_categoria: 3,imagen: "../../assets/productos/torta.jpg", variantes: [{
-        grupo: "Tipo de tortas", opciones: [
-            { precio:4500, nombre: "Mousse de chocolate"},{ precio:4600, nombre: "Fresas con crema de vainilla"},{ precio:5300, nombre: "Cheesecake de Nutella"},
-            { precio:5200, nombre: "Banana cream pie"},{ precio:5500, nombre: "Torta de 80 golpes"}
+    { nombre: "Torta",codigo: "300100",precio: 4000,stock: 0,categoria: "Postre",cod_categoria: 3,imagen: "../../assets/productos/torta.jpg", variantes: [{
+        grupo: "Tipo", opciones: [
+            { precio:0, nombre: "Chocolate"},{ precio:500, nombre: "Mousse de chocolate"},{ precio:600, nombre: "Fresas con crema de vainilla"},{ precio:300, nombre: "Cheesecake de Nutella"},
+            { precio:200, nombre: "Banana cream pie"},{ precio:500, nombre: "Torta de 80 golpes"}
         ]
     }]},
     { nombre: "Helado",codigo: "400100",precio: 4500,stock: 0,categoria: "Postre",cod_categoria: 3,imagen: "../../assets/productos/helado.jpg", variantes: [{ grupo: "sabores", opciones: [
@@ -19,7 +19,7 @@ export const Data: Productos[] = [
     ]
     }]},
     { nombre: "Stick de Helado",codigo: "400101",precio: 3500,stock: 0,categoria: "Postre",cod_categoria: 3,imagen: "../../assets/productos/stickHelado.jpg", variantes: [
-        { grupo: "sabores", opciones: [
+        { grupo: "Sabores", opciones: [
             { precio:0, nombre: "Chocolate"},{ precio:0, nombre: "Chocolate Cabsha"},{ precio:0, nombre: "Chocolate Imperial"},
             { precio:0, nombre: "Frutilla a la Crema"},{ precio:0, nombre: "Crema Americana"},{ precio:0, nombre: "Pistacho"},
             { precio:0, nombre: "Tramontana"},{ precio:0, nombre: "Menta Granizada"},{ precio:0, nombre: "Dulce de Leche Granizado"},

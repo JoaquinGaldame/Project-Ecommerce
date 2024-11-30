@@ -21,3 +21,10 @@ interface IOpciones
     precio: number;
     nombre: string;
 }
+
+export interface IVariante{
+    grupo: number;
+    option: number;
+    precio: number;
+    active: number;
+}

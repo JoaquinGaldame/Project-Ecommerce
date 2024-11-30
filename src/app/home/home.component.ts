@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { NgFor, DecimalPipe } from '@angular/common';
-import { Productos, IVariantes } from '../Interfaces/Home.inteface';
+import { Productos, IVariantes, IVariante } from '../Interfaces/Home.inteface';
 import { CompactComponent } from '../layout/Common/compact/compact.component';
 import { LayoutComponent } from '../layout/Common/layout.component';
 import { Data, Categorias } from './data';
@@ -22,14 +22,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   public productosSubject: BehaviorSubject<Productos[]> = new BehaviorSubject<Productos[]>([]);
   public Categorias: any[] = [];
   public categoriaSeleccionada: number = 0;
-  public Variantes: any[] = [];
+  public Variantes: IVariante[] = [];
   public viewModal: boolean = false;
   public nombreModal: string = '';
   public nombreVariantes: string = '';
+  public nombreVariantesSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  public nombreModalSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public productoModal: Productos;
   public cantidadModal: number = 1;
   public cantidadModalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(1);
   public importeModal: number= 0;
+  public importeItemModal: number = 0;
   public precioProductoModal: number = 0;
   public importeModalSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -44,8 +47,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.productosSubject.subscribe((producto) => {
       this.productosModal = producto;
     });
+    this.cantidadModalSubject.subscribe((cantidad) => {
+      this.cantidadModal = cantidad;
+    });
     this.importeModalSubject.subscribe((importe) => {
       this.importeModal = importe;
+    });
+    this.nombreModalSubject.subscribe((nombre) =>{
+      this.nombreModal = nombre;
+    });
+    this.nombreVariantesSubject.subscribe((nombre) => {
+      this.nombreVariantes = nombre;
     });
     this.productosSubject.next(this.productos);
   }
@@ -65,6 +77,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.productoModal = productSeleccionado[0];
       this.nombreModal = this.productoModal.nombre;
       this.importeModalSubject.next(this.productoModal.precio);
+      this.productoModal.variantes.forEach((element, index) => {
+        element.opciones.forEach((item, indexItem) => {
+          let Data: IVariante = { grupo:index,option:indexItem,precio:item.precio,active:0}
+          this.Variantes.push(Data);
+        })
+      })
       //this.nombreVariantes = this.productoModal.variantes.nombreVariante;
       this.viewModal = true;
 
@@ -79,19 +97,35 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closeModal(): void{
     this.viewModal = false;
+    this.Variantes = [];
+    this.nombreVariantesSubject.next('');
   }
 
   public calcularImporteTotal(): void{
     const auxProducto = JSON.parse(JSON.stringify(this.productoModal));
-    let importeTotal = auxProducto.precio1;
-    // this.variantes.forEach((element, index) =>{
-    //     if(element.active===1){
-    //         importeTotal += element.precio;
-    //     }
-    // });
+    let importeTotal = auxProducto.precio;
+    this.Variantes.forEach((element, index) =>{
+        if(element.active===1){
+            importeTotal += element.precio;
+        }
+    });
     this.precioProductoModal = importeTotal;
     importeTotal = importeTotal * this.cantidadModal;
     this.importeModalSubject.next(importeTotal);
+  }
+
+  sumarImporte(actived: boolean, varianteIndex: number, optionIndex: number, grupo: string, nombre: string):void{
+    this.Variantes = this.Variantes.map((opcion) => {
+      if (opcion.grupo === varianteIndex) {
+          return { ...opcion, active: (opcion.option === optionIndex) && actived ? 1 : 0 };
+      }
+      return opcion;
+    });
+    const nombres = this.nombreVariantes.split('/');
+    nombres[varianteIndex] = grupo.toUpperCase() + ':' + nombre.toUpperCase();
+    const nombreFinal = nombres.join(' / ');
+    this.nombreVariantesSubject.next(nombreFinal);
+    this.calcularImporteTotal();
   }
 
   public sumarCantidadModal(): void{
@@ -110,20 +144,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public agregarProdCarritoModal(): void{
-    if(this.productoModal){
-        const auxProducto = JSON.parse(JSON.stringify(this.productoModal));
-        auxProducto.cantidad = this.cantidadModal;
-        auxProducto.nombre = this.nombreModal + ' (' + this.nombreVariantes + ')';
-        if(this.precioProductoModal !== 0){
-            auxProducto.precio1 = this.precioProductoModal;
-        }
-        console.log(auxProducto);
-        // this.agregarCarro(auxProducto);
-        this.cantidadModal=1;
-        // this.modalSubject.next(false);
-    }
-  }
 
   public seleccionarCategoria(numero: number): void{
     if(numero !== 0){
